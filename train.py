@@ -66,6 +66,8 @@ def main(cfg):
         e_pose_loss_weight=cfg.LOSS.POSE_W,
         e_shape_loss_weight=cfg.LOSS.SHAPE_W,
         d_motion_loss_weight=cfg.LOSS.D_MOTION_LOSS_W,
+        const_loss_weight=cfg.LOSS.CONST_W,
+        const_gap=cfg.LOSS.CONST_GAP,
     )
 
     # ========= Initialize networks, optimizers and lr_schedulers ========= #

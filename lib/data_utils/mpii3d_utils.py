@@ -292,7 +292,7 @@ def read_test_data(dataset_path):
 
 
             dataset['vid_name'].append(vid_uniq_id)
-            dataset['frame_id'].append(img_file.split("/")[-1].split(".")[0])
+            dataset['frame_id'].append(img_file.split(os.sep)[-1].split(".")[0])
             dataset['img_name'].append(img_file)
             dataset['joints2D'].append(joints_2d)
             dataset['joints3D'].append(joints_3d)

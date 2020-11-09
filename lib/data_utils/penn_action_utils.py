@@ -17,6 +17,7 @@
 import sys
 sys.path.append('.')
 
+import os
 import glob
 import torch
 import joblib
@@ -75,7 +76,7 @@ def read_data(folder):
 
     for fname in tqdm(file_names):
         vid_dict=load_mat(fname)
-        imgs = sorted(glob.glob(folder + '/frames/'+ fname.strip().split('/')[-1].split('.')[0]+'/*.jpg'))
+        imgs = sorted(glob.glob(folder + '/frames/'+ fname.strip().split(os.sep)[-1].split('.')[0]+'/*.jpg'))
         kp_2d = np.zeros((vid_dict['nframes'], 13, 3))
         perm_idxs = get_perm_idxs('pennaction', 'common')
 

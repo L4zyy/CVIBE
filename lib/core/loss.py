@@ -27,6 +27,8 @@ class VIBELoss(nn.Module):
             e_pose_loss_weight=1.,
             e_shape_loss_weight=0.001,
             d_motion_loss_weight=1.,
+            const_loss_weight=300,
+            const_gap=8,
             device='cuda',
     ):
         super(VIBELoss, self).__init__()
@@ -43,6 +45,10 @@ class VIBELoss(nn.Module):
 
         self.enc_loss = batch_encoder_disc_l2_loss
         self.dec_loss = batch_adv_disc_l2_loss
+
+        self.consistent_loss = consistent_loss
+        self.const_loss_weight = const_loss_weight
+        self.const_gap = const_gap
 
     def forward(
             self,
@@ -116,6 +122,14 @@ class VIBELoss(nn.Module):
             loss_pose = loss_pose * self.e_pose_loss_weight
             loss_dict['loss_shape'] = loss_shape
             loss_dict['loss_pose'] = loss_pose
+
+        # for k, v in loss_dict.items():
+        #     print(k, v)
+        loss_const = self.consistent_loss(preds['theta'][sample_2d_count:], self.const_gap)
+        loss_const *= self.const_loss_weight
+        loss_dict['loss_const'] = loss_const
+        # print(loss_const)
+        # exit()
 
         gen_loss = torch.stack(list(loss_dict.values())).sum()
 
@@ -249,3 +263,17 @@ def batch_smooth_shape_loss(pred_theta):
     shape = pred_theta[:, :, 75:]
     shape_diff = shape[:, 1:, :] - shape[:, :-1, :]
     return torch.mean(shape_diff).abs()
+
+def consistent_loss(pred_theta, gap):
+    pose = pred_theta[:,:,3:75]
+    losses = []
+    bs, f = pred_theta.shape[:2]
+
+    if f <= gap+1:
+        losses = pose[:,1:,:] - pose[:,:-1,:]
+    else:
+        for i in range(bs - gap):
+            pose_diff = pose[:,i:i+gap,:] - pose[:,i+1:i+gap+1,:]
+            losses.append(pose_diff)
+        losses = torch.stack(losses, dim=0)
+    return torch.mean(losses).abs()

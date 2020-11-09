@@ -19,14 +19,14 @@ from yacs.config import CfgNode as CN
 
 # CONSTANTS
 # You may modify them at will
-VIBE_DB_DIR = 'data/vibe_db'
-AMASS_DIR = 'data/amass'
-INSTA_DIR = 'data/insta_variety'
-MPII3D_DIR = 'data/mpi_inf_3dhp'
-THREEDPW_DIR = 'data/3dpw'
-PENNACTION_DIR = 'data/penn_action'
-POSETRACK_DIR = 'data/posetrack'
-VIBE_DATA_DIR = 'data/vibe_data'
+VIBE_DB_DIR = 'data\\vibe_db'
+AMASS_DIR = 'data\\amass'
+INSTA_DIR = 'data\\insta_variety'
+MPII3D_DIR = 'data\\mpi_inf_3dhp'
+THREEDPW_DIR = 'data\\3dpw'
+PENNACTION_DIR = 'data\\penn_action'
+POSETRACK_DIR = 'data\\posetrack'
+VIBE_DATA_DIR = 'data\\vibe_data'
 
 # Configuration variables
 cfg = CN()
@@ -90,6 +90,8 @@ cfg.LOSS.KP_3D_W = 30.
 cfg.LOSS.SHAPE_W = 0.001
 cfg.LOSS.POSE_W = 1.0
 cfg.LOSS.D_MOTION_LOSS_W = 1.
+cfg.LOSS.CONST_W = 300.
+cfg.LOSS.CONST_GAP = 8
 
 cfg.MODEL = CN()
 
