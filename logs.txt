@@ -1,0 +1,11 @@
+baseline
+    - Shuffle (vibe_tests/09-11-2020_20-05-44_vibe)
+    - Not Shuffle (vibe_tests/10-11-2020_19-08-55_vibe)
+minimize consistent loss over frames
+    - False, 300, 8 (vibe_tests/10-11-2020_08-47-29_vibe)
+    - False, 300, 4 (vibe_tests/11-11-2020_04-32-41_vibe)
+    - False, 100, 8 (vibe_tests/12-11-2020_01-37-02_vibe)
+    - False, 100, 4 (vibe_tests/12-11-2020_11-28-10_vibe)
+    - True, 300, 8 (vibe_tests/13-11-2020_02-25-58_vibe)
+    - True, 100, 8 (vibe_tests/14-11-2020_12-09-04_vibe)
+    - True, 300, 4 (vibe_tests/14-11-2020_17-42-52_vibe)
