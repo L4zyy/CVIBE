@@ -44,7 +44,6 @@ def get_data_loaders(cfg):
     train_2d_loader = DataLoader(
         dataset=train_2d_db,
         batch_size=data_2d_batch_size,
-        # shuffle=(cfg.LOSS.CONST_W == 0),
         shuffle=True,
         num_workers=cfg.NUM_WORKERS,
     )
@@ -56,7 +55,6 @@ def get_data_loaders(cfg):
     train_3d_loader = DataLoader(
         dataset=train_3d_db,
         batch_size=data_3d_batch_size,
-        # shuffle=(cfg.LOSS.CONST_W == 0),
         shuffle=True,
         num_workers=cfg.NUM_WORKERS,
     )

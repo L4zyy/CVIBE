@@ -23,6 +23,10 @@ import torch.nn.functional as F
 from lib.core.config import VIBE_DATA_DIR
 from lib.models.spin import Regressor, hmr
 
+import math
+from lib.models.self_attention import SelfAttention
+from lib.models.position_encoding import PositionalEncoder
+
 
 class TemporalEncoder(nn.Module):
     def __init__(
@@ -31,28 +35,54 @@ class TemporalEncoder(nn.Module):
             hidden_size=2048,
             add_linear=False,
             bidirectional=False,
-            use_residual=True
+            use_residual=True,
+            temporal_type='gru',
+            seqlen=16,
     ):
         super(TemporalEncoder, self).__init__()
 
-        self.gru = nn.GRU(
-            input_size=2048,
-            hidden_size=hidden_size,
-            bidirectional=bidirectional,
-            num_layers=n_layers
-        )
+        self.temporal_type = temporal_type
 
-        self.linear = None
-        if bidirectional:
-            self.linear = nn.Linear(hidden_size*2, 2048)
-        elif add_linear:
-            self.linear = nn.Linear(hidden_size, 2048)
+        self.input_size = 2048
+
+        if temporal_type == 'gru':
+            self.gru = nn.GRU(
+                input_size=2048,
+                hidden_size=hidden_size,
+                bidirectional=bidirectional,
+                num_layers=n_layers
+            )
+
+            self.linear = None
+            if bidirectional:
+                self.linear = nn.Linear(hidden_size*2, 2048)
+            elif add_linear:
+                self.linear = nn.Linear(hidden_size, 2048)
+
+        elif temporal_type == 'self_attn':
+            self.self_attn = SelfAttention(self.input_size)
+
+            self.pos_embed = torch.zeros(seqlen, self.input_size).to('cuda')
+            for pos in range(seqlen):
+                for i in range(0, self.input_size, 2):
+                    self.pos_embed[pos, i] = \
+                    math.sin(pos / (10000 ** ((2 * i)/self.input_size)))
+                    self.pos_embed[pos, i + 1] = \
+                    math.cos(pos / (10000 ** ((2 * (i + 1))/self.input_size)))
+
+            self.linear = None
+            if add_linear:
+                self.linear = nn.Linear(self.input_size, 2048)
+
         self.use_residual = use_residual
 
     def forward(self, x):
         n,t,f = x.shape
         x = x.permute(1,0,2) # NTF -> TNF
-        y, _ = self.gru(x)
+        if self.temporal_type == 'gru':
+            y, _ = self.gru(x)
+        elif self.temporal_type == 'self_attn':
+            y = self.self_attn(x, self.pos_embed.unsqueeze(1).repeat(1, n, 1))
         if self.linear:
             y = F.relu(y)
             y = self.linear(y.view(-1, y.size(-1)))
@@ -74,6 +104,7 @@ class VIBE(nn.Module):
             bidirectional=False,
             use_residual=True,
             pretrained=osp.join(VIBE_DATA_DIR, 'spin_model_checkpoint.pth.tar'),
+            temporal_type='gru'
     ):
 
         super(VIBE, self).__init__()
@@ -87,6 +118,8 @@ class VIBE(nn.Module):
             bidirectional=bidirectional,
             add_linear=add_linear,
             use_residual=use_residual,
+            temporal_type=temporal_type,
+            seqlen=self.seqlen,
         )
 
         # regressor can predict cam, pose and shape params in an iterative way

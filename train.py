@@ -80,6 +80,7 @@ def main(cfg):
         add_linear=cfg.MODEL.TGRU.ADD_LINEAR,
         bidirectional=cfg.MODEL.TGRU.BIDIRECTIONAL,
         use_residual=cfg.MODEL.TGRU.RESIDUAL,
+        temporal_type=cfg.MODEL.TEMPORAL_TYPE,
     ).to(cfg.DEVICE)
 
     if cfg.TRAIN.PRETRAINED != '' and os.path.isfile(cfg.TRAIN.PRETRAINED):
