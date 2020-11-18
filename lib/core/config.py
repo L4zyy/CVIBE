@@ -105,6 +105,12 @@ cfg.MODEL.TGRU.RESIDUAL = False
 cfg.MODEL.TGRU.HIDDEN_SIZE = 2048
 cfg.MODEL.TGRU.BIDIRECTIONAL = False
 
+cfg.MODEL.SELF_ATTN = CN()
+cfg.MODEL.SELF_ATTN.NUM_LAYERS = 8
+cfg.MODEL.SELF_ATTN.NUM_HEAD = 6
+cfg.MODEL.SELF_ATTN.RESIDUAL = False
+cfg.MODEL.SELF_ATTN.ADD_LINEAR = False
+
 
 def get_cfg_defaults():
     """Get a yacs CfgNode object with default values for my_project."""

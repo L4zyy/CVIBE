@@ -23,7 +23,7 @@ TRAIN:
   PRETRAINED_REGRESSOR: 'data/vibe_data/spin_model_checkpoint.pth.tar'
   RESUME: ''
   START_EPOCH: 0
-  END_EPOCH: 40
+  END_EPOCH: 80
   LR_PATIENCE: 5
   DATA_2D_RATIO: 0.6
   DATASETS_2D:
@@ -56,3 +56,8 @@ MODEL:
     RESIDUAL: true
     BIDIRECTIONAL: false
     HIDDEN_SIZE: 1024
+  SELF_ATTN:
+    NUM_LAYERS: 3
+    NUM_HEAD: 4
+    ADD_LINEAR: true
+    RESIDUAL: true

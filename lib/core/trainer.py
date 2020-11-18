@@ -338,8 +338,8 @@ class Trainer():
 
             self.save_model(performance, epoch)
 
-            if performance > 80.0:
-                exit(f'MPJPE error is {performance}, higher than 80.0. Exiting!...')
+            # if performance > 80.0:
+            #     exit(f'MPJPE error is {performance}, higher than 80.0. Exiting!...')
 
         self.writer.close()
 

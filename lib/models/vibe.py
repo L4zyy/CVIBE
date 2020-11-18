@@ -25,7 +25,6 @@ from lib.models.spin import Regressor, hmr
 
 import math
 from lib.models.self_attention import SelfAttention
-from lib.models.position_encoding import PositionalEncoder
 
 
 class TemporalEncoder(nn.Module):
@@ -38,6 +37,7 @@ class TemporalEncoder(nn.Module):
             use_residual=True,
             temporal_type='gru',
             seqlen=16,
+            n_head=0,
     ):
         super(TemporalEncoder, self).__init__()
 
@@ -60,7 +60,7 @@ class TemporalEncoder(nn.Module):
                 self.linear = nn.Linear(hidden_size, 2048)
 
         elif temporal_type == 'self_attn':
-            self.self_attn = SelfAttention(self.input_size)
+            self.self_attn = SelfAttention(self.input_size, nhead=n_head, num_layers=n_layers)
 
             self.pos_embed = torch.zeros(seqlen, self.input_size).to('cuda')
             for pos in range(seqlen):
@@ -104,7 +104,8 @@ class VIBE(nn.Module):
             bidirectional=False,
             use_residual=True,
             pretrained=osp.join(VIBE_DATA_DIR, 'spin_model_checkpoint.pth.tar'),
-            temporal_type='gru'
+            temporal_type='gru',
+            n_head=0,
     ):
 
         super(VIBE, self).__init__()
@@ -120,6 +121,7 @@ class VIBE(nn.Module):
             use_residual=use_residual,
             temporal_type=temporal_type,
             seqlen=self.seqlen,
+            n_head=n_head,
         )
 
         # regressor can predict cam, pose and shape params in an iterative way

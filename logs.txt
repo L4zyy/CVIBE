@@ -9,3 +9,6 @@ minimize consistent loss over frames
     - True, 300, 8 (vibe_tests/13-11-2020_02-25-58_vibe)
     - True, 100, 8 (vibe_tests/14-11-2020_12-09-04_vibe)
     - True, 300, 4 (vibe_tests/14-11-2020_17-42-52_vibe)
+self_attn w/o const loss
+    - 6, 8 (vibe_tests/17-11-2020_22-35-02_vibe)
+    - 3, 4 (vibe_tests/17-11-2020_23-37-15_vibe)

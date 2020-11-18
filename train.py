@@ -71,8 +71,10 @@ def main(cfg):
     )
 
     # ========= Initialize networks, optimizers and lr_schedulers ========= #
+    n_layers = cfg.MODEL.TGRU.NUM_LAYERS if cfg.MODEL.TEMPORAL_TYPE == 'gru' else cfg.MODEL.SELF_ATTN.NUM_LAYERS
+    n_head = 0 if cfg.MODEL.TEMPORAL_TYPE == 'gru' else cfg.MODEL.SELF_ATTN.NUM_HEAD
     generator = VIBE(
-        n_layers=cfg.MODEL.TGRU.NUM_LAYERS,
+        n_layers= n_layers,
         batch_size=cfg.TRAIN.BATCH_SIZE,
         seqlen=cfg.DATASET.SEQLEN,
         hidden_size=cfg.MODEL.TGRU.HIDDEN_SIZE,
@@ -81,6 +83,7 @@ def main(cfg):
         bidirectional=cfg.MODEL.TGRU.BIDIRECTIONAL,
         use_residual=cfg.MODEL.TGRU.RESIDUAL,
         temporal_type=cfg.MODEL.TEMPORAL_TYPE,
+        n_head=n_head,
     ).to(cfg.DEVICE)
 
     if cfg.TRAIN.PRETRAINED != '' and os.path.isfile(cfg.TRAIN.PRETRAINED):
