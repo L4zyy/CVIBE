@@ -4,4 +4,5 @@ __pycache__/
 vibe-env/
 output/
 *.mp4
+*.mkv
 results
