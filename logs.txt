@@ -16,3 +16,13 @@ self_attn w/o const loss
 self_attn with const loss
     - 3, 4 / 300, 8 (vibe_tests/18-11-2020_14-28-06_vibe)
     - 3, 4 / 100, 8 (vibe_tests/19-11-2020_04-04-18_vibe)
+new const loss
+    - True, 300, 12 (vibe_tests/25-11-2020_22-33-48_vibe)
+    - True, 300, 4 (vibe_tests/26-11-2020_01-48-51_vibe)
+    - True, 100, 4 (vibe_tests/26-11-2020_13-17-42_vibe)
+    - True, 300, 8 (vibe_tests/26-11-2020_19-49-09_vibe)
+    - True, 100, 8 vibe_tests/26-11-2020_20-53-27_vibe)
+
+new cl+as
+    - 6, 8 / 300, 8 (vibe_tests/27-11-2020_03-56-13_vibe)
+    - 6, 8 / 100, 8 (vibe_tests/28-11-2020_03-13-38_vibe)

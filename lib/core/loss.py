@@ -269,11 +269,11 @@ def consistent_loss(pred_theta, gap):
     losses = []
     bs, f = pred_theta.shape[:2]
 
-    if f <= gap+1:
+    if f < gap+1:
         losses = pose[:,1:,:] - pose[:,:-1,:]
     else:
-        for i in range(bs - gap):
-            pose_diff = pose[:,i:i+gap,:] - pose[:,i+1:i+gap+1,:]
+        for i in range(f-gap+1):
+            pose_diff = pose[:,i ,:] - pose[:,i+gap-1 ,:]
             losses.append(pose_diff)
         losses = torch.stack(losses, dim=0)
-    return torch.mean(losses).abs()
+    return torch.mean(losses.abs())
